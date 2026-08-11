@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import auth, health, locations, weather
+from app.api import analytics, auth, health, locations, weather
 from app.core.config import get_settings
 from app.core.openapi import (
     API_DESCRIPTION,
@@ -48,6 +48,7 @@ def create_app() -> FastAPI:
     app.include_router(weather.router, prefix="/api")
     app.include_router(locations.router, prefix="/api")
     app.include_router(auth.router, prefix="/api")
+    app.include_router(analytics.router, prefix="/api")
 
     @app.get("/", tags=["system"])
     def root() -> dict[str, str]:

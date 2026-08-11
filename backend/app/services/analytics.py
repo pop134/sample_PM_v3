@@ -24,7 +24,13 @@ class _Reading(Protocol):
 
 def bucket_start(when: datetime, period: Period) -> datetime:
     """Normalise a timestamp to the start of its period (UTC)."""
-    when = when.astimezone(timezone.utc)
+    # Stored timestamps are UTC wall-clock; SQLite returns them naive, so treat
+    # a naive value as UTC rather than assuming the host's local zone.
+    when = (
+        when.replace(tzinfo=timezone.utc)
+        if when.tzinfo is None
+        else when.astimezone(timezone.utc)
+    )
     day = when.replace(hour=0, minute=0, second=0, microsecond=0)
     if period is Period.DAILY:
         return day
@@ -81,3 +87,31 @@ def rolling_average(buckets: list[AggregateBucket], window: int) -> list[TrendPo
             )
         )
     return points
+
+
+def fetch_readings(
+    session,
+    latitude: float,
+    longitude: float,
+    *,
+    start: datetime | None = None,
+    end: datetime | None = None,
+    provider: str | None = None,
+) -> list:
+    """Load observations for a location/time-range (ascending) for aggregation."""
+    from sqlalchemy import func, select
+
+    from app.models.observation import Observation
+
+    stmt = select(Observation).where(
+        func.round(Observation.latitude, 4) == round(latitude, 4),
+        func.round(Observation.longitude, 4) == round(longitude, 4),
+    )
+    if provider:
+        stmt = stmt.where(Observation.provider == provider)
+    if start is not None:
+        stmt = stmt.where(Observation.observed_at >= start)
+    if end is not None:
+        stmt = stmt.where(Observation.observed_at <= end)
+    stmt = stmt.order_by(Observation.observed_at.asc())
+    return list(session.execute(stmt).scalars().all())
