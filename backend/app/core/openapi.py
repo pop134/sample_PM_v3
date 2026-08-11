@@ -24,6 +24,7 @@ TAGS_METADATA = [
     {"name": "auth", "description": "Registration, login and current user."},
     {"name": "analytics", "description": "Aggregates, trends and forecast accuracy."},
     {"name": "alerts", "description": "Anomaly & threshold alert events."},
+    {"name": "preferences", "description": "Per-user settings, saved locations & thresholds."},
     {"name": "system", "description": "Health & readiness probes."},
 ]
 
