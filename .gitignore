@@ -28,3 +28,7 @@ dist/
 .idea/
 .vscode/
 backend/openapi.json
+
+# Playwright
+frontend/playwright-report/
+frontend/test-results/
