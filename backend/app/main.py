@@ -17,7 +17,8 @@ from app.api import (
     weather,
 )
 from app.core.config import get_settings
-from app.core.middleware import MetricsMiddleware
+from app.core.logging import configure_logging
+from app.core.middleware import MetricsMiddleware, RequestLoggingMiddleware
 from app.core.openapi import (
     API_DESCRIPTION,
     CONTACT,
@@ -35,6 +36,7 @@ async def lifespan(app: FastAPI):
 
 
 def create_app() -> FastAPI:
+    configure_logging()
     settings = get_settings()
     app = FastAPI(
         title=settings.app_name,
@@ -47,6 +49,7 @@ def create_app() -> FastAPI:
     )
 
     app.add_middleware(MetricsMiddleware)
+    app.add_middleware(RequestLoggingMiddleware)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["http://localhost:5173"],
