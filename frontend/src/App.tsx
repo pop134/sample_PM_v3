@@ -3,7 +3,10 @@ import { AppLayout } from "./components/AppLayout";
 import { Card } from "./components/Card";
 import { DashboardGrid } from "./components/DashboardGrid";
 import { Nav } from "./components/Nav";
-import { Spinner } from "./components/Spinner";
+import { EmptyState } from "./components/states/EmptyState";
+import { ErrorState } from "./components/states/ErrorState";
+import { Skeleton } from "./components/states/Skeleton";
+import { viewStatus } from "./components/states/status";
 import { TrendChart } from "./features/charts/TrendChart";
 import { LocationBar } from "./features/locations/LocationBar";
 import { useLocations } from "./features/locations/LocationContext";
@@ -13,13 +16,19 @@ import { DEFAULT_VIEW, type ViewId } from "./navigation/views";
 
 function DashboardView() {
   const { active } = useLocations();
-  const { data, loading, error, notFound } = useCurrentConditions(active.latitude, active.longitude);
+  const query = useCurrentConditions(active.latitude, active.longitude);
+  const status = viewStatus(query);
   return (
     <DashboardGrid>
-      {loading && <Card title="Current"><Spinner /></Card>}
-      {error && <Card title="Current"><p className="muted">Couldn’t load conditions: {error}</p></Card>}
-      {notFound && <Card title="Current"><p className="muted">No data yet for {active.name}.</p></Card>}
-      {data && <CurrentConditions observation={data} />}
+      {status === "ready" && query.data ? (
+        <CurrentConditions observation={query.data} />
+      ) : (
+        <Card title="Current conditions">
+          {status === "loading" && <Skeleton />}
+          {status === "error" && <ErrorState message={query.error ?? "Failed to load"} onRetry={query.refetch} />}
+          {status === "empty" && <EmptyState message={`No data yet for ${active.name}.`} icon="🌤️" />}
+        </Card>
+      )}
       <Card title="Overview">
         <p className="muted">Switch or add locations above; trends live under Analytics.</p>
       </Card>
