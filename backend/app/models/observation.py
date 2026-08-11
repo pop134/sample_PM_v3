@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from sqlalchemy import DateTime, Float, String, UniqueConstraint
+from sqlalchemy import DateTime, Float, Index, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.session import Base
@@ -21,6 +21,9 @@ class Observation(Base):
             "latitude", "longitude", "observed_at", "provider",
             name="uq_observation_point_time_provider",
         ),
+        # Composite index for the dominant query: a location's readings over a
+        # time range (WBS 1.2.1 time-series access pattern).
+        Index("ix_observation_point_time", "latitude", "longitude", "observed_at"),
     )
 
     id: Mapped[int] = mapped_column(primary_key=True)
