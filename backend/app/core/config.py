@@ -22,6 +22,11 @@ class Settings(BaseSettings):
     # Ingestion / polling (WBS 1.1.2)
     poll_interval_seconds: int = 900
 
+    # Auth (WBS 1.2.3)
+    secret_key: str = "dev-secret-change-me"
+    jwt_algorithm: str = "HS256"
+    access_token_expire_minutes: int = 60
+
 
 @lru_cache
 def get_settings() -> Settings:
