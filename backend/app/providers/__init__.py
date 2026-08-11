@@ -19,7 +19,11 @@ from app.providers.registry import (
     register_provider,
 )
 
+# Import concrete providers for their registration side effects (WBS 1.1.1).
+from app.providers.openweather import OpenWeatherProvider  # noqa: E402
+
 __all__ = [
+    "OpenWeatherProvider",
     "ProviderConfig",
     "ProviderConfigError",
     "ProviderError",
