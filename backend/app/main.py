@@ -8,6 +8,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import auth, health, locations, weather
 from app.core.config import get_settings
+from app.core.openapi import (
+    API_DESCRIPTION,
+    CONTACT,
+    LICENSE,
+    TAGS_METADATA,
+)
 from app.db.session import init_db
 
 
@@ -20,7 +26,15 @@ async def lifespan(app: FastAPI):
 
 def create_app() -> FastAPI:
     settings = get_settings()
-    app = FastAPI(title=settings.app_name, version="0.1.0", lifespan=lifespan)
+    app = FastAPI(
+        title=settings.app_name,
+        version="0.1.0",
+        description=API_DESCRIPTION,
+        openapi_tags=TAGS_METADATA,
+        contact=CONTACT,
+        license_info=LICENSE,
+        lifespan=lifespan,
+    )
 
     app.add_middleware(
         CORSMiddleware,
