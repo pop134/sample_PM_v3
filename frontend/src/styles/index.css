@@ -74,3 +74,18 @@ a { color: var(--color-accent); }
 .chart__tick { fill: var(--color-text-muted); font-size: 10px; }
 
 .trend__controls { display: flex; gap: var(--space-2); margin-bottom: var(--space-3); text-transform: capitalize; }
+
+.loc-search { position: relative; max-width: 320px; }
+.loc-search__input {
+  width: 100%; padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+  background: var(--color-surface); color: var(--color-text);
+}
+.loc-search__results {
+  list-style: none; margin: var(--space-1) 0 0; padding: var(--space-1);
+  position: absolute; z-index: 10; width: 100%;
+  background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+}
+.loc-search__item { width: 100%; text-align: left; background: transparent; border: none; color: var(--color-text); padding: var(--space-2); cursor: pointer; }
+.loc-search__item:hover { background: var(--color-surface-alt); }
+.loc-search__empty { padding: var(--space-2); }
