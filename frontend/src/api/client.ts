@@ -13,6 +13,7 @@ import type {
   ObservationPage,
   Preferences,
   SavedLocationRecord,
+  ThresholdRecord,
 } from "./types";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
@@ -99,6 +100,9 @@ export const api = {
     request<SavedLocationRecord>("/api/preferences/locations", {}, { method: "POST", body: { name, latitude, longitude } }),
   removeSavedLocation: (id: number) =>
     request<void>(`/api/preferences/locations/${id}`, {}, { method: "DELETE" }),
+  thresholds: () => request<ThresholdRecord[]>("/api/preferences/thresholds"),
+  upsertThreshold: (body: ThresholdRecord) =>
+    request<ThresholdRecord>("/api/preferences/thresholds", {}, { method: "PUT", body }),
 };
 
 // Back-compat named helpers.

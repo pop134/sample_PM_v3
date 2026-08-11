@@ -16,6 +16,10 @@ import { CurrentConditions } from "./features/weather/CurrentConditions";
 import { useCurrentConditions } from "./features/weather/useCurrentConditions";
 import { useInterval } from "./lib/useInterval";
 import { AccountPanel } from "./features/auth/AccountPanel";
+import { useAuth } from "./features/auth/AuthContext";
+import { PreferencesPanel } from "./features/settings/PreferencesPanel";
+import { SavedLocationsPanel } from "./features/settings/SavedLocationsPanel";
+import { ThresholdsPanel } from "./features/settings/ThresholdsPanel";
 import { DEFAULT_VIEW, type ViewId } from "./navigation/views";
 
 function DashboardView() {
@@ -54,6 +58,18 @@ function AnalyticsView() {
   return <TrendChart lat={active.latitude} lon={active.longitude} />;
 }
 
+function SettingsView() {
+  const { user } = useAuth();
+  return (
+    <DashboardGrid>
+      <AccountPanel />
+      {user && <PreferencesPanel />}
+      {user && <SavedLocationsPanel />}
+      {user && <ThresholdsPanel />}
+    </DashboardGrid>
+  );
+}
+
 export function App() {
   const [view, setView] = useState<ViewId>(DEFAULT_VIEW);
   return (
@@ -61,7 +77,7 @@ export function App() {
       {view === "dashboard" && <DashboardView />}
       {view === "analytics" && <AnalyticsView />}
       {view === "alerts" && <Card title="Alerts"><p className="muted">Alert feed arrives with the alerts UI.</p></Card>}
-      {view === "settings" && <DashboardGrid><AccountPanel /></DashboardGrid>}
+      {view === "settings" && <SettingsView />}
     </AppLayout>
   );
 }

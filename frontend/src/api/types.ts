@@ -88,3 +88,10 @@ export interface SavedLocationRecord {
   latitude: number;
   longitude: number;
 }
+
+export interface ThresholdRecord {
+  metric: string;
+  minimum: number | null;
+  maximum: number | null;
+  severity: string;
+}
