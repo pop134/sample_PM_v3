@@ -50,3 +50,14 @@ class ForecastRepository:
             written += 1
         self.session.commit()
         return written
+
+    def list_for(
+        self, latitude: float, longitude: float, *, provider: str | None = None
+    ) -> list[ForecastRecord]:
+        stmt = select(ForecastRecord).where(
+            ForecastRecord.latitude == round(latitude, _DP),
+            ForecastRecord.longitude == round(longitude, _DP),
+        )
+        if provider:
+            stmt = stmt.where(ForecastRecord.provider == provider)
+        return list(self.session.execute(stmt.order_by(ForecastRecord.target_time)).scalars().all())
