@@ -1,5 +1,7 @@
 # Weather Tracking & Analysis Dashboard
 
+[![Backend CI](https://github.com/pop134/sample_PM_v3/actions/workflows/backend-ci.yml/badge.svg)](https://github.com/pop134/sample_PM_v3/actions/workflows/backend-ci.yml) [![Frontend CI](https://github.com/pop134/sample_PM_v3/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/pop134/sample_PM_v3/actions/workflows/frontend-ci.yml)
+
 Web application that ingests weather data from external providers, stores and
 analyses time-series history, and presents current conditions, trends and alerts
 through an interactive dashboard.
