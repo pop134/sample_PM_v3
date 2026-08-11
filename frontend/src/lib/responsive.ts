@@ -15,3 +15,8 @@ export function breakpointFor(width: number): Breakpoint {
 export function isMobile(width: number): boolean {
   return breakpointFor(width) === "mobile";
 }
+
+/** On mobile the nav is shown only when explicitly opened; always shown otherwise. */
+export function isNavVisible(mobile: boolean, open: boolean): boolean {
+  return mobile ? open : true;
+}
