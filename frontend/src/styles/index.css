@@ -1,0 +1,36 @@
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #e2e8f0;
+  --accent: #38bdf8;
+  --ok: #4ade80;
+  --error: #f87171;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app-shell {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem;
+}
+
+h1 { color: var(--accent); margin-bottom: 0.25rem; }
+.subtitle { color: #94a3b8; margin-top: 0; }
+
+.status-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.status--ok { color: var(--ok); }
+.status--error { color: var(--error); }
