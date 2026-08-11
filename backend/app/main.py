@@ -6,8 +6,18 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import alerts, analytics, auth, health, locations, preferences, weather
+from app.api import (
+    alerts,
+    analytics,
+    auth,
+    health,
+    locations,
+    metrics,
+    preferences,
+    weather,
+)
 from app.core.config import get_settings
+from app.core.middleware import MetricsMiddleware
 from app.core.openapi import (
     API_DESCRIPTION,
     CONTACT,
@@ -36,6 +46,7 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
 
+    app.add_middleware(MetricsMiddleware)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["http://localhost:5173"],
@@ -45,6 +56,7 @@ def create_app() -> FastAPI:
     )
 
     app.include_router(health.router, prefix="/api")
+    app.include_router(metrics.router, prefix="/api")
     app.include_router(weather.router, prefix="/api")
     app.include_router(locations.router, prefix="/api")
     app.include_router(auth.router, prefix="/api")
