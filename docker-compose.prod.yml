@@ -1,0 +1,19 @@
+services:
+  backend:
+    build: ./backend
+    environment:
+      ENVIRONMENT: production
+      DATABASE_URL: ${DATABASE_URL:-sqlite:///./weather.db}
+      OPENWEATHER_API_KEY: ${OPENWEATHER_API_KEY:-}
+      SECRET_KEY: ${SECRET_KEY:?set a strong secret in production}
+    expose:
+      - "8000"
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    restart: unless-stopped
