@@ -15,6 +15,7 @@ import { DEFAULT_REFRESH_MS, labelForMs } from "./features/realtime/refresh";
 import { CurrentConditions } from "./features/weather/CurrentConditions";
 import { useCurrentConditions } from "./features/weather/useCurrentConditions";
 import { useInterval } from "./lib/useInterval";
+import { AccountPanel } from "./features/auth/AccountPanel";
 import { DEFAULT_VIEW, type ViewId } from "./navigation/views";
 
 function DashboardView() {
@@ -60,7 +61,7 @@ export function App() {
       {view === "dashboard" && <DashboardView />}
       {view === "analytics" && <AnalyticsView />}
       {view === "alerts" && <Card title="Alerts"><p className="muted">Alert feed arrives with the alerts UI.</p></Card>}
-      {view === "settings" && <Card title="Settings"><p className="muted">Preferences arrive in task 1.6.2.</p></Card>}
+      {view === "settings" && <DashboardGrid><AccountPanel /></DashboardGrid>}
     </AppLayout>
   );
 }

@@ -65,3 +65,26 @@ export interface AccuracyResult {
   bias_c: number | null;
   rmse_c: number | null;
 }
+
+export interface AuthToken {
+  access_token: string;
+  token_type: string;
+}
+
+export interface AuthUser {
+  id: number;
+  email: string;
+  is_admin: boolean;
+}
+
+export interface Preferences {
+  temperature_unit: string;
+  wind_unit: string;
+}
+
+export interface SavedLocationRecord {
+  id: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+}
