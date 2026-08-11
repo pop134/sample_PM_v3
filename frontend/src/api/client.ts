@@ -1,5 +1,5 @@
 // Thin fetch wrapper (WBS 1.4.x). Formalised into a typed client in 1.5.1.
-import type { Observation } from "./types";
+import type { LocationSummary, Observation } from "./types";
 import type { TrendPoint } from "../features/charts/trends";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
@@ -39,4 +39,8 @@ export function getTrends(
   return request<TrendPoint[]>(
     `/api/analytics/trends?lat=${lat}&lon=${lon}&period=${period}&window=${window}`,
   );
+}
+
+export function getLocations(): Promise<LocationSummary[]> {
+  return request<LocationSummary[]>("/api/locations");
 }
