@@ -1,4 +1,6 @@
-// Thin fetch wrapper. Replaced by a typed, generated client under WBS 1.5.1.
+// Thin fetch wrapper (WBS 1.4.x). Formalised into a typed client in 1.5.1.
+import type { Observation } from "./types";
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
 
 export interface Health {
@@ -7,14 +9,25 @@ export interface Health {
   environment: string;
 }
 
-async function request<T>(path: string): Promise<T> {
+export class ApiError extends Error {
+  constructor(public readonly status: number, message: string) {
+    super(message);
+    this.name = "ApiError";
+  }
+}
+
+export async function request<T>(path: string): Promise<T> {
   const resp = await fetch(`${BASE_URL}${path}`);
   if (!resp.ok) {
-    throw new Error(`Request failed: ${resp.status}`);
+    throw new ApiError(resp.status, `Request failed: ${resp.status}`);
   }
   return (await resp.json()) as T;
 }
 
 export function getHealth(): Promise<Health> {
   return request<Health>("/api/health");
+}
+
+export function getCurrentConditions(lat: number, lon: number): Promise<Observation> {
+  return request<Observation>(`/api/weather/current?lat=${lat}&lon=${lon}`);
 }

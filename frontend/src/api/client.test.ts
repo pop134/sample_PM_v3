@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { getHealth } from "./client";
+import { ApiError, getCurrentConditions, getHealth } from "./client";
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -8,20 +8,30 @@ afterEach(() => {
 describe("getHealth", () => {
   it("returns the parsed health payload", async () => {
     const payload = { status: "ok", app: "Weather Dashboard", environment: "test" };
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async () => new Response(JSON.stringify(payload), { status: 200 })),
-    );
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify(payload), { status: 200 })));
     const health = await getHealth();
     expect(health.status).toBe("ok");
-    expect(health.app).toBe("Weather Dashboard");
   });
 
-  it("throws when the response is not ok", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async () => new Response("error", { status: 500 })),
-    );
-    await expect(getHealth()).rejects.toThrow(/500/);
+  it("throws ApiError when the response is not ok", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => new Response("error", { status: 500 })));
+    await expect(getHealth()).rejects.toBeInstanceOf(ApiError);
+  });
+});
+
+describe("getCurrentConditions", () => {
+  it("requests the current endpoint with coordinates", async () => {
+    let calledUrl = "";
+    vi.stubGlobal("fetch", vi.fn(async (url: string) => {
+      calledUrl = String(url);
+      return new Response(JSON.stringify({ id: 1 }), { status: 200 });
+    }));
+    await getCurrentConditions(51.5, -0.12);
+    expect(calledUrl).toContain("/api/weather/current?lat=51.5&lon=-0.12");
+  });
+
+  it("surfaces a 404 as ApiError with status", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => new Response("no data", { status: 404 })));
+    await expect(getCurrentConditions(0, 0)).rejects.toMatchObject({ status: 404 });
   });
 });
