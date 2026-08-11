@@ -89,3 +89,11 @@ a { color: var(--color-accent); }
 .loc-search__item { width: 100%; text-align: left; background: transparent; border: none; color: var(--color-text); padding: var(--space-2); cursor: pointer; }
 .loc-search__item:hover { background: var(--color-surface-alt); }
 .loc-search__empty { padding: var(--space-2); }
+
+.loc-bar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; width: 100%; }
+.loc-bar__chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.loc-chip { display: inline-flex; align-items: center; border: 1px solid var(--color-border); border-radius: 999px; overflow: hidden; }
+.loc-chip--active { border-color: var(--color-accent); }
+.loc-chip__name { background: transparent; border: none; color: var(--color-text); padding: var(--space-1) var(--space-3); cursor: pointer; }
+.loc-chip--active .loc-chip__name { color: var(--color-accent); font-weight: 600; }
+.loc-chip__remove { background: transparent; border: none; color: var(--color-text-muted); cursor: pointer; padding: 0 var(--space-2); }
