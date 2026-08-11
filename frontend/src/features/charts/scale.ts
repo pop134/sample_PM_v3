@@ -5,6 +5,12 @@ export interface Point {
   y: number;
 }
 
+export interface Series {
+  label: string;
+  color?: string;
+  values: number[];
+}
+
 /** Min/max of a list; returns [0, 1] for an empty list. */
 export function extent(values: number[]): [number, number] {
   if (values.length === 0) return [0, 1];

@@ -5,6 +5,7 @@ import { DashboardGrid } from "./components/DashboardGrid";
 import { Nav } from "./components/Nav";
 import { Spinner } from "./components/Spinner";
 import { CurrentConditions } from "./features/weather/CurrentConditions";
+import { TrendChart } from "./features/charts/TrendChart";
 import { DEFAULT_LOCATION, useCurrentConditions } from "./features/weather/useCurrentConditions";
 import { DEFAULT_VIEW, type ViewId } from "./navigation/views";
 
@@ -30,7 +31,7 @@ export function App() {
   return (
     <AppLayout nav={<Nav active={view} onSelect={setView} />}>
       {view === "dashboard" && <DashboardView />}
-      {view === "analytics" && <Card title="Analytics"><p className="muted">Trend charts arrive in task 1.4.4.</p></Card>}
+      {view === "analytics" && <TrendChart lat={DEFAULT_LOCATION.lat} lon={DEFAULT_LOCATION.lon} />}
       {view === "alerts" && <Card title="Alerts"><p className="muted">Alert feed arrives with the alerts UI.</p></Card>}
       {view === "settings" && <Card title="Settings"><p className="muted">Preferences arrive in task 1.6.2.</p></Card>}
     </AppLayout>
