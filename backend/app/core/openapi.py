@@ -22,6 +22,8 @@ TAGS_METADATA = [
     {"name": "weather", "description": "Current conditions & historical queries."},
     {"name": "locations", "description": "Tracked locations metadata."},
     {"name": "auth", "description": "Registration, login and current user."},
+    {"name": "analytics", "description": "Aggregates, trends and forecast accuracy."},
+    {"name": "alerts", "description": "Anomaly & threshold alert events."},
     {"name": "system", "description": "Health & readiness probes."},
 ]
 
