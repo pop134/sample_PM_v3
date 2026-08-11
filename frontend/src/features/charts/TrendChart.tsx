@@ -1,8 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getTrends } from "../../api/client";
+import { useQuery } from "../../api/useQuery";
 import { Card } from "../../components/Card";
 import { LineChart } from "../../components/LineChart";
-import { Spinner } from "../../components/Spinner";
+import { EmptyState } from "../../components/states/EmptyState";
+import { ErrorState } from "../../components/states/ErrorState";
+import { Skeleton } from "../../components/states/Skeleton";
+import { viewStatus } from "../../components/states/status";
 import { toTrendChartData, type TrendPoint } from "./trends";
 
 type Period = "daily" | "weekly" | "monthly";
@@ -15,22 +19,13 @@ interface TrendChartProps {
 
 export function TrendChart({ lat, lon }: TrendChartProps) {
   const [period, setPeriod] = useState<Period>("daily");
-  const [points, setPoints] = useState<TrendPoint[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let active = true;
-    setPoints(null);
-    setError(null);
-    getTrends(lat, lon, period)
-      .then((p) => active && setPoints(p))
-      .catch((e: unknown) => active && setError(String(e)));
-    return () => {
-      active = false;
-    };
-  }, [lat, lon, period]);
-
-  const data = points ? toTrendChartData(points) : null;
+  const query = useQuery<TrendPoint[]>(
+    () => getTrends(lat, lon, period),
+    [lat, lon, period],
+    { cacheKey: `trends:${lat}:${lon}:${period}` },
+  );
+  const status = viewStatus(query, (d) => d.length === 0);
+  const data = query.data ? toTrendChartData(query.data) : null;
 
   return (
     <Card title="Temperature trend" className="trend">
@@ -46,10 +41,10 @@ export function TrendChart({ lat, lon }: TrendChartProps) {
           </button>
         ))}
       </div>
-      {error && <p className="muted">Couldn’t load trends: {error}</p>}
-      {!error && !points && <Spinner />}
-      {data && data.series[0].values.length === 0 && <p className="muted">No trend data yet.</p>}
-      {data && data.series[0].values.length > 0 && (
+      {status === "loading" && <Skeleton lines={4} />}
+      {status === "error" && <ErrorState message={query.error ?? "Failed to load"} onRetry={query.refetch} />}
+      {status === "empty" && <EmptyState message="No trend data yet for this location." icon="📈" />}
+      {status === "ready" && data && (
         <LineChart series={data.series} labels={data.labels} ariaLabel="Temperature trend" />
       )}
     </Card>
