@@ -26,3 +26,8 @@ export function formatAgo(elapsedMs: number): string {
   if (m < 60) return `${m}m ago`;
   return `${Math.floor(m / 60)}h ago`;
 }
+
+/** Label for a given interval ms (falls back to "Custom"). */
+export function labelForMs(ms: number | null): string {
+  return REFRESH_INTERVALS.find((o) => o.ms === ms)?.label ?? "Custom";
+}

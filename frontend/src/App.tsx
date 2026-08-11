@@ -10,14 +10,21 @@ import { viewStatus } from "./components/states/status";
 import { TrendChart } from "./features/charts/TrendChart";
 import { LocationBar } from "./features/locations/LocationBar";
 import { useLocations } from "./features/locations/LocationContext";
+import { AutoRefreshControl } from "./features/realtime/AutoRefreshControl";
+import { DEFAULT_REFRESH_MS, labelForMs } from "./features/realtime/refresh";
 import { CurrentConditions } from "./features/weather/CurrentConditions";
 import { useCurrentConditions } from "./features/weather/useCurrentConditions";
+import { useInterval } from "./lib/useInterval";
 import { DEFAULT_VIEW, type ViewId } from "./navigation/views";
 
 function DashboardView() {
   const { active } = useLocations();
   const query = useCurrentConditions(active.latitude, active.longitude);
   const status = viewStatus(query);
+  const [intervalMs, setIntervalMs] = useState<number | null>(DEFAULT_REFRESH_MS);
+
+  useInterval(() => query.refetch(), intervalMs);
+
   return (
     <DashboardGrid>
       {status === "ready" && query.data ? (
@@ -30,7 +37,12 @@ function DashboardView() {
         </Card>
       )}
       <Card title="Overview">
-        <p className="muted">Switch or add locations above; trends live under Analytics.</p>
+        <p className="muted">
+          {intervalMs === null
+            ? "Live updates are off."
+            : `Refreshing every ${labelForMs(intervalMs)} without a page reload.`}
+        </p>
+        <AutoRefreshControl value={intervalMs} onChange={setIntervalMs} />
       </Card>
     </DashboardGrid>
   );
