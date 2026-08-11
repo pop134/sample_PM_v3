@@ -64,3 +64,7 @@ a { color: var(--color-accent); }
   padding: var(--space-2) var(--space-3); color: var(--color-text-muted); cursor: pointer;
 }
 .nav__item--active { background: var(--color-surface); color: var(--color-text); border-color: var(--color-border); }
+
+.current__condition { text-transform: capitalize; color: var(--color-text-muted); margin-top: 0; }
+.current__tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: var(--space-4); }
+.current__ts { margin-bottom: 0; font-size: var(--font-size-sm); }
