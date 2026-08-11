@@ -97,3 +97,21 @@ a { color: var(--color-accent); }
 .loc-chip__name { background: transparent; border: none; color: var(--color-text); padding: var(--space-1) var(--space-3); cursor: pointer; }
 .loc-chip--active .loc-chip__name { color: var(--color-accent); font-weight: 600; }
 .loc-chip__remove { background: transparent; border: none; color: var(--color-text-muted); cursor: pointer; padding: 0 var(--space-2); }
+
+/* Responsive layout (WBS 1.4.6) */
+@media (max-width: 1024px) {
+  .layout__main { padding: var(--space-4); }
+  .dashboard-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+}
+
+@media (max-width: 640px) {
+  .layout__header { padding: var(--space-3) var(--space-4); }
+  .layout__brand { font-size: var(--font-size-md); }
+  .layout__main { padding: var(--space-3); }
+  .dashboard-grid { grid-template-columns: 1fr; gap: var(--space-3); }
+  .loc-bar { flex-direction: column; align-items: stretch; }
+  .loc-search { max-width: 100%; }
+  .current__tiles { grid-template-columns: repeat(2, 1fr); }
+  .nav { overflow-x: auto; flex-wrap: nowrap; }
+  .nav__item { white-space: nowrap; }
+}
