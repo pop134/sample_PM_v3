@@ -21,10 +21,13 @@ describe("getHealth", () => {
 
 describe("getCurrentConditions", () => {
   it("requests the current endpoint with coordinates", async () => {
-    const spy = vi.fn(async () => new Response(JSON.stringify({ id: 1 }), { status: 200 }));
-    vi.stubGlobal("fetch", spy);
+    let calledUrl = "";
+    vi.stubGlobal("fetch", vi.fn(async (url: string) => {
+      calledUrl = String(url);
+      return new Response(JSON.stringify({ id: 1 }), { status: 200 });
+    }));
     await getCurrentConditions(51.5, -0.12);
-    expect(String(spy.mock.calls[0][0])).toContain("/api/weather/current?lat=51.5&lon=-0.12");
+    expect(calledUrl).toContain("/api/weather/current?lat=51.5&lon=-0.12");
   });
 
   it("surfaces a 404 as ApiError with status", async () => {
