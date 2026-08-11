@@ -1,10 +1,4 @@
-import { buildLinePath, extent, scaleLinear, type Point } from "../features/charts/scale";
-
-export interface Series {
-  label: string;
-  color?: string;
-  values: number[];
-}
+import { buildLinePath, extent, scaleLinear, type Point, type Series } from "../features/charts/scale";
 
 interface LineChartProps {
   series: Series[];

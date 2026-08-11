@@ -1,5 +1,6 @@
 // Thin fetch wrapper (WBS 1.4.x). Formalised into a typed client in 1.5.1.
 import type { Observation } from "./types";
+import type { TrendPoint } from "../features/charts/trends";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
 
@@ -30,4 +31,12 @@ export function getHealth(): Promise<Health> {
 
 export function getCurrentConditions(lat: number, lon: number): Promise<Observation> {
   return request<Observation>(`/api/weather/current?lat=${lat}&lon=${lon}`);
+}
+
+export function getTrends(
+  lat: number, lon: number, period = "daily", window = 3,
+): Promise<TrendPoint[]> {
+  return request<TrendPoint[]>(
+    `/api/analytics/trends?lat=${lat}&lon=${lon}&period=${period}&window=${window}`,
+  );
 }
