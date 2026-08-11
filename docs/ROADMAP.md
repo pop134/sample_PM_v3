@@ -33,4 +33,5 @@ across multiple PRs.
 
 ## Status
 - [x] Project foundation & scaffolding
-- [ ] 1.1.1 (in progress)
+- [x] 1.1.1 [BE] Integrate external weather data providers (parts 1 & 2)
+- [ ] 1.1.2 (next)
